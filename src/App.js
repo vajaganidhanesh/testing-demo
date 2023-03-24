@@ -14,8 +14,25 @@ function App() {
             name='email'
           />
         </div>
-        <div>
-          <label htmlFor='password'></label>
+        <div className='mb-3'>
+          <label htmlFor='password'>Enter Password</label>
+          <input
+            type='password'
+            placeholder='enter password'
+            className='form-control'
+            id='password'
+            name='password'
+          />
+        </div>
+        <div className='mb-3'>
+          <label htmlFor='confirm-password'>Confirm Password</label>
+          <input
+            type='password'
+            placeholder='enter confirm password'
+            className='form-control'
+            id='confirm-password'
+            name='password'
+          />
         </div>
       </form>
     </div>
