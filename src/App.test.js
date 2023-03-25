@@ -22,3 +22,33 @@ test("should be able to type an email", () => {
   userEvent.type(emailInputElement, "vajaganidhanesh@gmail.com");
   expect(emailInputElement.value).toBe("vajaganidhanesh@gmail.com");
 });
+
+test("should be able to type a Password", () => {
+  render(<App />);
+  const passwordInputElement = screen.getByLabelText("Enter Password");
+  userEvent.type(passwordInputElement, "dhanesh");
+  expect(passwordInputElement.value).toBe("dhanesh");
+});
+
+test("Both passwords should be match", () => {
+  render(<App />);
+  const confirmPasswordInputElement = screen.getByLabelText("Confirm Password");
+  userEvent.type(confirmPasswordInputElement, "dhanesh");
+  expect(confirmPasswordInputElement.value).toBe("dhanesh");
+});
+
+test("should show email error message on invalid email", () => {
+  render(<App />);
+  const emailErrorElement = screen.queryByText(/the email you put is invalid/i);
+  const emailInputElement = screen.getByRole("textbox", {
+    name: "Email address",
+  });
+  const submitBtnElement = screen.getByRole("button", {
+    name: "Submit",
+  });
+  expect(emailErrorElement).not.toBeInTheDocument();
+  userEvent.type(emailInputElement, "vajaganidhanesh@gmail.com");
+  userEvent.click(submitBtnElement);
+
+  expect(emailErrorElement).toBeInTheDocument();
+});
