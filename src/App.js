@@ -25,6 +25,10 @@ function App() {
       return setError(
         "The password you entered should contain 5 or more characters"
       );
+    } else if (password !== confirmPassword) {
+      return setError("password should match with previous password");
+    } else {
+      return setError("");
     }
   };
 
