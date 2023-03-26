@@ -17,13 +17,19 @@ const typeIntoForm = ({ email, password, confirmPassword }) => {
     "Enter confirmpassword"
   );
   if (email) {
-    userEvent.type(emailInputElement, email);
+    fireEvent.change(emailInputElement, {
+      target: { value: email },
+    });
   }
   if (password) {
-    userEvent.type(passwordInputElement, password);
+    fireEvent.change(passwordInputElement, {
+      target: { value: password },
+    });
   }
   if (confirmPassword) {
-    userEvent.type(confirmPasswordInputElement, confirmPassword);
+    fireEvent.change(confirmPasswordInputElement, {
+      target: { value: confirmPassword },
+    });
   }
 
   return {
@@ -45,14 +51,16 @@ test("inputs should be initially empty", () => {
 });
 
 test("should be able to type an email", () => {
-  // const emailInputElement = screen.getByRole("textbox", {
-  //   name: "Email address",
-  // });
-  // userEvent.type(emailInputElement, "vajaganidhanesh@gmail.com");
-
-  const { emailInputElement } = typeIntoForm({
-    email: "vajaganidhanesh@gmail.com",
+  const emailInputElement = screen.getByRole("textbox", {
+    name: "Email address",
   });
+  fireEvent.change(emailInputElement, {
+    target: { value: "vajaganidhanesh@gmail.com" },
+  });
+
+  // const { emailInputElement } = typeIntoForm({
+  //   email: "vajaganidhanesh@gmail.com",
+  // });
   expect(emailInputElement.value).toBe("vajaganidhanesh@gmail.com");
 });
 
@@ -68,7 +76,7 @@ test("should be able to type a Password", () => {
 
 test("Both passwords should be match", () => {
   // const confirmPasswordInputElement = screen.getByLabelText("Confirm Password");
-  // userEvent.type(confirmPasswordInputElement, "dhanesh");
+  // fireEvent.change(confirmPasswordInputElement, "dhanesh");
 
   const { confirmPasswordInputElement } = typeIntoForm({
     confirmPassword: "dhanesh",
@@ -76,7 +84,7 @@ test("Both passwords should be match", () => {
   expect(confirmPasswordInputElement.value).toBe("dhanesh");
 });
 
-test("should show email error message on invalid email", async () => {
+test("should show email error message on invalid email", () => {
   const emailErrorElement = screen.queryByText(
     /the email you input is invalid/i
   );
@@ -88,16 +96,17 @@ test("should show email error message on invalid email", async () => {
   });
   expect(emailErrorElement).not.toBeInTheDocument();
 
-  userEvent.type(emailInputElement, "vajaganidhanesh@gmail.com");
-  userEvent.click(submitBtnElement);
+  fireEvent.change(emailInputElement, {
+    target: {
+      value: "vajaganidhaneshgmail.com",
+    },
+  });
+  fireEvent.click(submitBtnElement);
 
   const emailErrorElementAgain = screen.queryByText(
     /the email you input is invalid/i
   );
-  await waitFor(() => {
-    console.log(emailErrorElementAgain);
-    expect(emailErrorElementAgain).toBeNull();
-  });
+  expect(emailErrorElementAgain).toBeInTheDocument();
 });
 
 test("should be able to reset the form", () => {
@@ -123,14 +132,23 @@ test("should show password error if password is less than 5 characters", () => {
   const passwordErrorElement = screen.queryByText(
     /the password you entered should contain 5 or more characters/i
   );
-  userEvent.type(emailInputElement, "vajaganidhanesh@gmail.com");
+
+  fireEvent.change(emailInputElement, {
+    target: {
+      value: "vajaganidhanesh@gmail.com",
+    },
+  });
 
   expect(passwordErrorElement).not.toBeInTheDocument();
 
-  userEvent.type(passwordInputElement, "123");
-  userEvent.click(submitBtnElement);
+  fireEvent.change(passwordInputElement, {
+    target: { value: "123" },
+  });
+  fireEvent.click(submitBtnElement);
   const passwordErrorElementAgain = screen.queryByText(
     /the password you entered should contain 5 or more characters/i
   );
-  expect(passwordErrorElementAgain).toBeNull();
+  expect(passwordErrorElementAgain).toBeInTheDocument();
+  // await waitFor(() => {
+  // });
 });
