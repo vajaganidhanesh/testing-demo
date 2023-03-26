@@ -11,38 +11,51 @@ function App() {
 
   const { email, password, confirmPassword } = signupInput;
   const onChange = (e) => {
-    setSignupInput((prev) => ({
-      ...prev,
-      [e.target.id]: e.target.value,
-    }));
+    setSignupInput({
+      ...signupInput,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const submitForm = (e) => {
     e.preventDefault();
-    if (validator.isEmail(email)) {
-      return setError("the email you put is invalid");
+    if (!validator.isEmail(signupInput.email)) {
+      return setError("the email you input is invalid");
+    } else if (password.length < 5) {
+      return setError(
+        "The password you entered should contain 5 or more characters"
+      );
+    } else {
+      return setError("valid user id");
     }
   };
+
+  const reset = (e) => {
+    e.preventDefault();
+    setSignupInput({ email: "", password: "", confirmPassword: "" });
+  };
+
   return (
-    <div className='container my-5'>
-      <form onSubmit={submitForm}>
+    <div className='container my-5 '>
+      <form className='col-3'>
         <div className='mb-3'>
           <label htmlFor='email'>Email address</label>
           <input
             type='email'
-            placeholder='enter email'
+            placeholder='Enter email'
             className='form-control'
             id='email'
             name='email'
             value={email}
             onChange={onChange}
+            // autoComplete='off'
           />
         </div>
         <div className='mb-3'>
           <label htmlFor='password'>Enter Password</label>
           <input
             type='password'
-            placeholder='enter password'
+            placeholder='Enter password'
             className='form-control'
             id='password'
             name='password'
@@ -51,20 +64,32 @@ function App() {
           />
         </div>
         <div className='mb-3'>
-          <label htmlFor='confirm-password'>Confirm Password</label>
+          <label htmlFor='confirmPassword'>Confirm Password</label>
           <input
             type='password'
-            placeholder='enter confirm password'
+            placeholder='Enter confirmpassword'
             className='form-control'
-            id='confirm-password'
-            name='confirm-password'
+            id='confirmPassword'
+            name='confirmPassword'
             value={confirmPassword}
             onChange={onChange}
           />
         </div>
+        {/* {error !== true ? (
+          <p className={error ? "text-success" : "text-danger"}>{error}</p>
+        ) : null} */}
+
         {error && <p className='text-danger'>{error}</p>}
-        <button className='btn btn-primary' type='submit'>
+        <button className='btn btn-primary' type='submit' onClick={submitForm}>
           Submit
+        </button>
+        <button
+          className='btn btn-secondary ms-2'
+          type='submit'
+          id='reset'
+          onClick={reset}
+        >
+          reset
         </button>
       </form>
     </div>

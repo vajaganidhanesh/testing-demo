@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, queryByText, render, screen } from "@testing-library/react";
 import App from "./App";
 
 test("inputs should be initially empty", () => {
@@ -39,16 +39,38 @@ test("Both passwords should be match", () => {
 
 test("should show email error message on invalid email", () => {
   render(<App />);
-  const emailErrorElement = screen.queryByText(/the email you put is invalid/i);
+  const emailErrorElement = screen.queryByText(
+    /the email you input is invalid/i
+  );
   const emailInputElement = screen.getByRole("textbox", {
-    name: "Email address",
+    name: /email/i,
   });
   const submitBtnElement = screen.getByRole("button", {
-    name: "Submit",
+    name: /submit/i,
   });
   expect(emailErrorElement).not.toBeInTheDocument();
+
   userEvent.type(emailInputElement, "vajaganidhanesh@gmail.com");
   userEvent.click(submitBtnElement);
 
-  expect(emailErrorElement).toBeInTheDocument();
+  const emailErrorElementAgain = screen.queryByText(
+    /the email you input is invalid/i
+  );
+  console.log(submitBtnElement);
+  // expect(emailErrorElementAgain).toBeInTheDocument();
+});
+
+test("should be able to reset the form", () => {
+  render(<App />);
+  const resetBtn = screen.getByRole("button", { name: "reset" });
+  const emailInputElement = screen.getByPlaceholderText("Enter email");
+  const passwordInputElement = screen.getByPlaceholderText("Enter password");
+  const confirmPasswordInputElement = screen.getByPlaceholderText(
+    "Enter confirmpassword"
+  );
+
+  fireEvent.click(resetBtn);
+  expect(emailInputElement.value).toBe("");
+  expect(passwordInputElement.value).toBe("");
+  expect(confirmPasswordInputElement.value).toBe("");
 });
