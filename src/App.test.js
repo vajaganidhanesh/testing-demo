@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { fireEvent, queryByText, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
 
 test("inputs should be initially empty", () => {
@@ -56,7 +56,7 @@ test("should show email error message on invalid email", () => {
   const emailErrorElementAgain = screen.queryByText(
     /the email you input is invalid/i
   );
-  console.log(submitBtnElement);
+  // console.log(submitBtnElement);
   // expect(emailErrorElementAgain).toBeInTheDocument();
 });
 
@@ -73,4 +73,26 @@ test("should be able to reset the form", () => {
   expect(emailInputElement.value).toBe("");
   expect(passwordInputElement.value).toBe("");
   expect(confirmPasswordInputElement.value).toBe("");
+});
+
+test("should show password error if password is less than 5 characters", () => {
+  render(<App />);
+  const emailInputElement = screen.getByPlaceholderText("Enter email");
+  const passwordInputElement = screen.getByPlaceholderText("Enter password");
+  const submitBtnElement = screen.getByRole("button", {
+    name: /submit/i,
+  });
+  const passwordErrorElement = screen.queryByText(
+    /the password you entered should contain 5 or more characters/i
+  );
+  userEvent.type(emailInputElement, "vajaganidhanesh@gmail.com");
+
+  expect(passwordErrorElement).not.toBeInTheDocument();
+
+  userEvent.type(passwordInputElement, "123");
+  userEvent.click(submitBtnElement);
+  const passwordErrorElementAgain = screen.queryByText(
+    /the password you entered should contain 5 or more characters/i
+  );
+  expect(passwordErrorElementAgain).toBeInTheDocument();
 });
