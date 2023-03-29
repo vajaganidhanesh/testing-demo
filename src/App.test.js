@@ -83,6 +83,21 @@ describe("App component", () => {
     expect(screen.getByPlaceholderText("Enter password").value).toBe("");
     expect(screen.getByPlaceholderText("Enter confirmpassword").value).toBe("");
   });
+
+  test("should have a blue color button for Submit", () => {
+    expect(screen.getByRole("button", { name: "Submit" })).toHaveStyle({
+      backgroundColor: "blue",
+    });
+  });
+
+  test("should change background color blue to red", () => {
+    const button = screen.getByRole("button", { name: "Submit" });
+    expect(button).toHaveStyle({
+      backgroundColor: "blue",
+    });
+
+    fireEvent.click(button);
+  });
 });
 
 describe("App Component Error Handling", () => {

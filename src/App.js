@@ -82,7 +82,12 @@ function App() {
         ) : null} */}
 
         {error && <p className='text-danger'>{error}</p>}
-        <button className='btn btn-primary' type='submit' onClick={submitForm}>
+        <button
+          className='btn btn-primary'
+          style={{ backgroundColor: "blue" }}
+          type='submit'
+          onClick={submitForm}
+        >
           Submit
         </button>
         <button
