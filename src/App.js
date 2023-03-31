@@ -104,6 +104,7 @@ function App() {
         >
           reset
         </button>
+        <input type='checkbox' />
       </form>
     </div>
   );

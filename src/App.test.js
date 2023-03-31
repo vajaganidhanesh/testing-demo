@@ -101,6 +101,14 @@ describe("App component", () => {
       backgroundColor: "red",
     });
   });
+
+  test("should be enabled and disabled based on checkbox", () => {
+    const button = screen.getByRole("button", { name: "Submit" });
+    expect(button).toBeEnabled();
+
+    const checkbox = screen.getByRole("checkbox");
+    expect(checkbox).not.toBeChecked();
+  });
 });
 
 describe("App Component Error Handling", () => {
