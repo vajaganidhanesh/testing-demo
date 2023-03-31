@@ -7,8 +7,11 @@ function App() {
     password: "",
     confirmPassword: "",
   });
+
+  const [color, setColor] = useState("red");
   const [error, setError] = useState("");
 
+  let newButtonColor = color === "red" ? "blue" : "red";
   const { email, password, confirmPassword } = signupInput;
   const onChange = (e) => {
     setSignupInput({
@@ -19,6 +22,7 @@ function App() {
 
   const submitForm = (e) => {
     e.preventDefault();
+    setColor(newButtonColor);
     if (!validator.isEmail(signupInput.email)) {
       return setError("the email you input is invalid");
     } else if (signupInput.password.length < 5) {
@@ -83,10 +87,12 @@ function App() {
 
         {error && <p className='text-danger'>{error}</p>}
         <button
-          className='btn btn-primary'
-          style={{ backgroundColor: "blue" }}
+          className='btn'
+          style={{ backgroundColor: newButtonColor }}
           type='submit'
-          onClick={submitForm}
+          onClick={(e) => {
+            submitForm(e);
+          }}
         >
           Submit
         </button>

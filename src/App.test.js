@@ -97,6 +97,9 @@ describe("App component", () => {
     });
 
     fireEvent.click(button);
+    expect(button).toHaveStyle({
+      backgroundColor: "red",
+    });
   });
 });
 
